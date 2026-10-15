@@ -67,7 +67,7 @@ Pour rendre le check bloquant, l'ajouter en « required status check » dans une
 
 1. Créer la page dans `docs/`, en français, avec un nom de fichier en anglais et en kebab-case (`docs/code-review.md`).
 2. L'ajouter au tableau « Documentation » du README, et ses questions fréquentes au tableau « Trouver une réponse rapidement ».
-3. Si la règle doit être connue dès le premier jour, la résumer en une ligne dans `CONTRIBUTING.md`, avec un lien absolu vers la page.
+3. Si la règle fait partie de l'essentiel, la résumer en une ligne dans `CONTRIBUTING.md`, avec un lien absolu vers la page.
 4. Ouvrir une PR sur ce dépôt.
 
 Une règle vit à un seul endroit. Les autres fichiers la résument et renvoient vers elle.
