@@ -2,7 +2,7 @@
 
 ## Objectif
 
-Ce dépôt est la référence des développeurs Geonative : règles de contribution, bonnes pratiques et conventions communes à tous les dépôts de l'organisation. Un développeur qui arrive doit y trouver en quelques secondes la documentation dont il a besoin. La documentation s'enrichit au fil du temps, une page par sujet dans `docs/`.
+Ce dépôt est la référence des développeurs Geonative : règles de contribution, bonnes pratiques et conventions communes à tous les dépôts de l'organisation. Tout développeur Geonative doit y trouver en quelques secondes la documentation dont il a besoin. La documentation s'enrichit au fil du temps, une page par sujet dans `docs/`.
 
 Le dépôt porte aussi ce que GitHub applique à toute l'organisation :
 
@@ -15,9 +15,10 @@ Tout ce qui arrive sur `main` s'applique aussitôt à la prochaine PR de chaque 
 ## Rédaction
 
 - La documentation est en français. Le contenu des PR (titre, description, commentaires) est en anglais, y compris sur ce dépôt.
+- La documentation s'adresse à tous les développeurs, pas seulement aux nouveaux : pas de ton d'accueil ni de parcours « première semaine ».
 - Le README reste un index : la porte d'entrée vers la documentation, pas un document de règles.
 - Chaque nouvelle page de `docs/` gagne une ligne dans le tableau « Documentation » du README, et ses questions fréquentes dans « Trouver une réponse rapidement ».
-- `CONTRIBUTING.md` reste court : l'essentiel à connaître dès le premier jour, avec un lien vers le détail.
+- `CONTRIBUTING.md` reste court : l'essentiel en une page, avec un lien vers le détail.
 - Une règle vit à un seul endroit. Les autres fichiers la résument en une ligne et renvoient vers elle.
 - Les liens de `CONTRIBUTING.md` et `pull_request_template.md` sont absolus (`https://github.com/geonativefr/.github/blob/main/…`), car GitHub affiche ces fichiers dans les autres dépôts. Ailleurs, les liens sont relatifs.
 - Le dépôt est public : aucun nom d'hôte, adresse, secret ni détail interne. Les exemples utilisent des noms fictifs (`acme/api`, `staging-api-01`).
