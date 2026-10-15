@@ -1,13 +1,15 @@
 # Bonnes pratiques de développement Geonative
 
-La référence des développeurs Geonative : règles de contribution, bonnes pratiques et conventions communes à **tous les dépôts de l'organisation**. Une seule version, maintenue ici.
+L'équipe de développement met à plat ses bonnes pratiques. Ce dépôt les réunit toutes au même endroit : règles de contribution, conventions et décisions communes à **tous les dépôts de l'organisation**, celles en vigueur comme celles à venir.
 
 ## Documentation
 
-| Document | Contenu |
-|---|---|
-| [Contribuer](CONTRIBUTING.md) | L'essentiel en une page : commits, Pull Requests, vérification automatique |
-| [Règles des Pull Requests](docs/pull-request-rules.md) | Titre, description, TODO de déploiement, dépendances entre PR, checklist |
+| Document | Contenu | Statut |
+|---|---|---|
+| [Contribuer](CONTRIBUTING.md) | L'essentiel en une page : commits, Pull Requests, vérification automatique | En vigueur |
+| [Règles des Pull Requests](docs/pull-request-rules.md) | Titre, description, TODO de déploiement, dépendances entre PR, checklist | En vigueur, vérification automatique à venir |
+
+**En vigueur** : la règle s'applique dès maintenant. **À venir** : la règle est décidée et s'appliquera bientôt, sa date est indiquée dès qu'elle est fixée.
 
 ## Trouver une réponse rapidement
 

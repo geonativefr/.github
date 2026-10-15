@@ -227,6 +227,8 @@ Exports above 5,000 rows are queued instead of streamed, because streaming them 
 
 ## 7. Vérification automatique
 
+> **À venir** : ce check n'est pas encore activé sur les dépôts de l'organisation. Sa date d'activation sera indiquée ici.
+
 Le check **PR rules / Title and description** tourne sur chaque PR, à l'ouverture et à chaque modification du titre ou de la description. Il vérifie les règles qu'un script peut trancher sans jugement :
 
 - titre : format Conventional Commits, longueur, point-virgule
