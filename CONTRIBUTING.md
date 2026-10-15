@@ -16,6 +16,8 @@ Le modèle de description est pré-rempli à l'ouverture de chaque PR. Supprime 
 
 ## Vérification automatique
 
+> **À venir** : ce check n'est pas encore activé sur les dépôts de l'organisation. Sa date d'activation sera indiquée ici.
+
 Le check **PR rules / Title and description** vérifie le titre et la description de chaque PR. S'il échoue, le détail des règles non respectées s'affiche dans le résumé du job. Corrige le titre ou la description : le check se relance seul, sans nouveau commit.
 
 ## Commits

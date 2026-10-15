@@ -66,7 +66,8 @@ Pour rendre le check bloquant, l'ajouter en « required status check » dans une
 ## Ajouter une documentation
 
 1. Créer la page dans `docs/`, en français, avec un nom de fichier en anglais et en kebab-case (`docs/code-review.md`).
-2. L'ajouter au tableau « Documentation » du README, et ses questions fréquentes au tableau « Trouver une réponse rapidement ».
+2. L'ajouter au tableau « Documentation » du README avec son statut, « En vigueur » ou « À venir », et ses questions fréquentes au tableau « Trouver une réponse rapidement ».
+   Une règle décidée mais pas encore appliquée est précédée dans sa page d'une ligne `> **À venir** : …`, avec sa date dès qu'elle est fixée. Le jour où elle s'applique, retirer cette ligne et passer le statut à « En vigueur ».
 3. Si la règle fait partie de l'essentiel, la résumer en une ligne dans `CONTRIBUTING.md`, avec un lien absolu vers la page.
 4. Ouvrir une PR sur ce dépôt.
 
