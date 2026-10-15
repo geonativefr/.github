@@ -1,0 +1,27 @@
+# The rules of this repository are checked on its own pull requests, with the
+# version of the workflow the pull request carries.
+
+name: CI
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize, ready_for_review]
+  push:
+    branches: [main]
+
+jobs:
+  tests:
+    name: Rule tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: node --test tests/*.test.mjs
+
+  pr-rules:
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/pr-rules.yml

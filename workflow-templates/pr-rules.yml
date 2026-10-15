@@ -1,0 +1,13 @@
+# Checks the pull request title and description against the Geonative rules:
+# https://github.com/geonativefr/.github/blob/main/docs/pull-request-rules.md
+# The rules live in geonativefr/.github, this file only calls them.
+
+name: PR rules
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize, ready_for_review]
+
+jobs:
+  pr-rules:
+    uses: geonativefr/.github/.github/workflows/pr-rules.yml@main

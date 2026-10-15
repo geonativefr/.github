@@ -1,0 +1,5 @@
+{
+  "name": "PR rules",
+  "description": "Checks pull request titles and descriptions against the Geonative pull request rules.",
+  "categories": ["Automation"]
+}

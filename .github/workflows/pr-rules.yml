@@ -1,0 +1,203 @@
+# Reusable workflow: checks a pull request title and description against
+# docs/pull-request-rules.md. Repositories call it, they never copy it:
+#
+#   uses: geonativefr/.github/.github/workflows/pr-rules.yml@main
+#
+# Only the rules a script can decide without judgement are checked here.
+# Clarity of the summary, relevance of Related PRs or English wording stay
+# with the reviewer.
+
+name: PR rules
+
+on:
+  workflow_call:
+    inputs:
+      conventional-commits:
+        description: "Require a Conventional Commits title, <type>(<scope>): <description>"
+        type: boolean
+        default: true
+      skip-bots:
+        description: Skip pull requests opened by bots (Dependabot, Renovate…)
+        type: boolean
+        default: true
+
+jobs:
+  check:
+    name: Title and description
+    if: ${{ !(inputs.skip-bots && github.event.pull_request.user.type == 'Bot') }}
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - uses: actions/github-script@v9
+        env:
+          CONVENTIONAL: ${{ inputs.conventional-commits }}
+        with:
+          script: |
+            // BEGIN rules
+            const RULES_URL = 'https://github.com/geonativefr/.github/blob/main/docs/pull-request-rules.md'
+            const LABELS = ['TODO Staging', 'TODO Prod', 'PRs Dependency', 'Related PRs']
+            const TODO_LABELS = ['TODO Staging', 'TODO Prod']
+            const TITLE_MAX = 72
+            const CONVENTIONAL_TITLE = /^(feat|fix|refactor|perf|test|docs|style|chore|build|ci|revert)(\([a-z0-9._/-]+\))?!?: \S/
+            const HEADING = /^ {0,3}#{1,6}(\s|$)/
+            const TRAILER = /^\s*(co-authored-by|signed-off-by|claude-session)\s*:/i
+            const LABEL_LINE = /^\*\*([^*]+):\*\*(.*)$/
+            const CHECKBOX = /^[-*+] \[[ xX]\](\s+(.*))?$/
+            const BULLET = /^[-*+](\s+(.*))?$/
+            const PR_URL = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/pull\/\d+\/?$/
+            const NOTHING = /^(none|n\/a|na|nothing|tbd|-|\.)$/i
+            const POINTER = /\b(the same (edit|change|step|steps|command)|same as (above|before|staging|prod)|as above|as before|likewise|idem)\b/i
+            const JOINED = /\b(then|and run|and restart|and reload|and deploy)\b/i
+
+            // A line with what is not prose taken out: inline code, URLs,
+            // autolinks and HTML entities, which may all hold a semicolon.
+            function prose(line) {
+              return line
+                .replace(/(`+)[\s\S]*?\1/g, ' ')
+                .replace(/<[a-z][a-z0-9+.-]*:[^>\s]*>/gi, ' ')
+                .replace(/\b[a-z][a-z0-9+.-]*:\/\/\S+/gi, ' ')
+                .replace(/&(#\d+|#x[0-9a-f]+|[a-z][a-z0-9]*);/gi, ' ')
+            }
+
+            // The lines of the body as GitHub renders them: HTML comments
+            // removed, fenced code blocks flagged so prose rules skip them.
+            function bodyLines(body) {
+              const text = body.replace(/\r\n?/g, '\n').replace(/<!--[\s\S]*?(-->|$)/g, '')
+              const out = []
+              let fence = null
+              for (const line of text.split('\n')) {
+                const marker = /^ {0,3}(`{3,}|~{3,})/.exec(line)
+                if (fence) {
+                  if (marker && marker[1][0] === fence[0] && marker[1].length >= fence.length && line.trim() === marker[1]) fence = null
+                  out.push({ text: line, code: true })
+                  continue
+                }
+                if (marker) { fence = marker[1]; out.push({ text: line, code: true }); continue }
+                out.push({ text: line, code: false })
+              }
+              return out
+            }
+
+            function checkTitle(title, conventional) {
+              const errors = []
+              const t = (title || '').trim()
+              if (!t) return ['Title: it is empty.']
+              const length = [...t].length
+              if (length > TITLE_MAX) errors.push(`Title: ${length} characters, keep it to about 60 (${TITLE_MAX} at most). Move the how and why to the description.`)
+              if (prose(t).includes(';')) errors.push('Title: no semicolon.')
+              if (conventional && !CONVENTIONAL_TITLE.test(t)) errors.push('Title: use `<type>(<scope>): <description>`, for example `feat(api): add CSV export`. Types: feat, fix, refactor, perf, test, docs, style, chore, build, ci, revert.')
+              return errors
+            }
+
+            function checkBody(body) {
+              const errors = []
+              const lines = bodyLines(body || '')
+              const proseLines = lines.filter((l) => !l.code).map((l) => l.text)
+
+              if (!proseLines.some((l) => l.trim())) return ['Description: it is empty. Start with a 3 to 5 line summary of what the PR does.']
+              if (proseLines.some((l) => HEADING.test(l))) errors.push('Description: no heading of any kind (`## Summary`…). Start directly with the summary text.')
+              if (proseLines.some((l) => prose(l).includes(';'))) errors.push('Description: no semicolon in prose (code in backticks may keep one).')
+              if (proseLines.some((l) => TRAILER.test(l))) errors.push('Description: no attribution or trailer line (`Co-Authored-By`…).')
+
+              // Split the body into the summary and the labelled sections.
+              let summary = []
+              const sections = []
+              let current = null
+              for (const { text, code } of lines) {
+                const line = text.trim()
+                const label = code ? null : LABEL_LINE.exec(line)
+                if (label && LABELS.includes(label[1].trim())) {
+                  current = { name: label[1].trim(), rest: label[2].trim(), items: [] }
+                  sections.push(current)
+                  continue
+                }
+                if (label && /^(todo|prs? dependenc|related)/i.test(label[1].trim())) {
+                  errors.push(`Description: unknown section \`**${label[1].trim()}:**\`. Use exactly ${LABELS.map((l) => '`**' + l + ':**`').join(', ')}.`)
+                  current = { name: null, rest: '', items: [] }
+                  continue
+                }
+                if (current) { if (line) current.items.push({ text: line, code }) } else summary.push(text)
+              }
+
+              if (!summary.some((l) => l.trim())) errors.push('Description: start with a 3 to 5 line summary of what the PR does, before any section.')
+
+              const seen = []
+              for (const s of sections) {
+                if (!s.name) continue
+                if (seen.includes(s.name)) { errors.push(`${s.name}: the section appears twice.`); continue }
+                seen.push(s.name)
+              }
+              const order = seen.map((n) => LABELS.indexOf(n))
+              if (order.some((v, i) => i > 0 && v < order[i - 1])) errors.push(`Description: sections must come in this order: ${LABELS.join(', ')}.`)
+
+              const urls = {}
+              for (const s of sections) {
+                if (!s.name) continue
+                const name = s.name
+                if (s.rest) errors.push(`${name}: the label stands alone on its line, put each item on its own line below it.`)
+                if (s.items.length === 0) { errors.push(`${name}: the section is empty. Fill it or delete it.`); continue }
+                const isTodo = TODO_LABELS.includes(name)
+                const texts = []
+                for (const item of s.items) {
+                  if (item.code) { errors.push(`${name}: only list items belong in a section, no code block. Put the command in backticks inside the item.`); break }
+                  if (isTodo) {
+                    const box = CHECKBOX.exec(item.text)
+                    if (!box) {
+                      if (BULLET.test(item.text)) errors.push(`${name}: \`${item.text}\` must be a checkbox, \`- [ ] <step>\`.`)
+                      else errors.push(`${name}: \`${item.text}\` is not a list item. Only \`- [ ] <step>\` lines belong in this section, move other text to the summary.`)
+                      continue
+                    }
+                    texts.push(box[2] || '')
+                  } else {
+                    const bullet = BULLET.exec(item.text)
+                    if (!bullet) { errors.push(`${name}: \`${item.text}\` is not a list item. Use \`- <pull request URL>\`.`); continue }
+                    const value = (bullet[2] || '').trim()
+                    if (/^\[[ xX]\]/.test(value)) { errors.push(`${name}: no checkbox here, use \`- <pull request URL>\`.`); continue }
+                    texts.push(value)
+                    if (value && !NOTHING.test(value) && !PR_URL.test(value)) errors.push(`${name}: \`${value}\` must be a full pull request URL alone on its line, like \`https://github.com/owner/repo/pull/123\`.`)
+                    if (PR_URL.test(value)) (urls[value] = urls[value] || []).push(name)
+                  }
+                }
+                const filled = texts.filter((t) => t.trim() && !NOTHING.test(t.trim()))
+                if (texts.length && filled.length === 0) errors.push(`${name}: the section has no real item. Fill it or delete it, never write it empty or as \`none\`.`)
+                else if (filled.length < texts.length) errors.push(`${name}: remove the empty or \`none\` items.`)
+                if (isTodo) {
+                  for (const t of filled) {
+                    const p = prose(t)
+                    if (POINTER.test(p)) errors.push(`${name}: \`${t}\` points to another item. Write the action in full: the file, the value before and after, the host or environment.`)
+                    if (JOINED.test(p)) errors.push(`${name}: \`${t}\` holds more than one action. One checkbox, one action: split the edit and the restart, reload, deploy or migration into two checkboxes.`)
+                  }
+                }
+              }
+              for (const [url, where] of Object.entries(urls)) {
+                if (where.includes('PRs Dependency') && where.includes('Related PRs')) errors.push(`Related PRs: ${url} is already a dependency, list it in PRs Dependency only.`)
+              }
+              return errors
+            }
+
+            function checkPullRequest({ title, body, conventional = true }) {
+              return [...checkTitle(title, conventional), ...checkBody(body)]
+            }
+            // END rules
+
+            const pr = context.payload.pull_request
+            if (!pr) {
+              core.setFailed('This workflow only runs on pull_request events.')
+              return
+            }
+            const errors = checkPullRequest({
+              title: pr.title,
+              body: pr.body || '',
+              conventional: process.env.CONVENTIONAL === 'true',
+            })
+            if (errors.length === 0) {
+              core.info('Title and description follow the pull request rules.')
+              return
+            }
+            for (const e of errors) core.error(e)
+            await core.summary
+              .addHeading('Pull request rules', 3)
+              .addList(errors)
+              .addRaw(`\nRules: ${RULES_URL}\n\nEdit the title or the description, the check runs again on its own.`)
+              .write()
+            core.setFailed(`${errors.length} pull request rule(s) broken. Rules: ${RULES_URL}`)
