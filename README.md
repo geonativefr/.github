@@ -1,68 +1,32 @@
-# geonativefr/.github
+# Bonnes pratiques de développement Geonative
 
-Règles et modèles communs à **tous les dépôts de l'organisation Geonative**. Une seule version, maintenue ici.
+La référence des développeurs Geonative : règles de contribution, bonnes pratiques et conventions communes à **tous les dépôts de l'organisation**. Une seule version, maintenue ici.
 
-## Contenu
+## Tu arrives dans l'équipe ?
 
-```
-.github/
-├── README.md                          ← ce fichier
-├── CONTRIBUTING.md                    ← hérité par tous les dépôts
-├── pull_request_template.md           ← hérité par tous les dépôts
-├── docs/
-│   └── pull-request-rules.md          ← règles détaillées des PR
-├── .github/workflows/
-│   ├── pr-rules.yml                   ← workflow réutilisable de vérification des PR
-│   └── ci.yml                         ← tests et vérification de ce dépôt
-├── workflow-templates/
-│   ├── pr-rules.yml                   ← modèle proposé dans l'onglet Actions des dépôts
-│   └── pr-rules.properties.json
-└── tests/
-    └── pr-rules.test.mjs              ← tests des règles du workflow
-```
+1. Lis [CONTRIBUTING.md](CONTRIBUTING.md) : l'essentiel en cinq minutes.
+2. Avant ta première Pull Request, parcours les [règles des Pull Requests](docs/pull-request-rules.md) et leur [exemple complet](docs/pull-request-rules.md#6-exemple-complet).
+3. Avant chaque Pull Request, passe la [checklist](docs/pull-request-rules.md#8-checklist-avant-douvrir-la-pr).
 
-## Comment ça marche
+## Documentation
 
-**Héritage automatique.** GitHub utilise `CONTRIBUTING.md` et `pull_request_template.md` de ce dépôt pour chaque dépôt de l'organisation qui n'a pas sa propre version. Pour en profiter, un dépôt **ne doit pas** contenir son propre `pull_request_template.md` (ni à la racine, ni dans `.github/`, ni dans `docs/`) : supprime-le s'il existe.
+| Document | Contenu |
+|---|---|
+| [Contribuer](CONTRIBUTING.md) | L'essentiel à connaître dès le premier jour : commits, Pull Requests, vérification automatique |
+| [Règles des Pull Requests](docs/pull-request-rules.md) | Titre, description, TODO de déploiement, dépendances entre PR, checklist |
 
-Ce dépôt doit rester **public** pour que l'héritage fonctionne.
+## Trouver une réponse rapidement
 
-**Vérification centralisée.** `.github/workflows/pr-rules.yml` contient toute la logique de vérification. Chaque dépôt l'appelle avec un fichier de quelques lignes qui ne change jamais. Une modification des règles ici s'applique à tous les dépôts dès leur prochaine PR.
+| Tu veux… | Lis |
+|---|---|
+| écrire un message de commit | [Commits](CONTRIBUTING.md#commits) |
+| titrer une Pull Request | [Titre](docs/pull-request-rules.md#1-titre) |
+| rédiger la description d'une Pull Request | [Description](docs/pull-request-rules.md#2-description) |
+| noter ce qu'il faut faire au déploiement | [TODO Staging / TODO Prod](docs/pull-request-rules.md#3-todo-staging--todo-prod) |
+| signaler une PR qui doit partir avant la tienne | [PRs Dependency](docs/pull-request-rules.md#4-prs-dependency) |
+| relier les PR d'un même lot de travail | [Related PRs](docs/pull-request-rules.md#5-related-prs) |
+| comprendre pourquoi le check « PR rules » échoue | [Vérification automatique](docs/pull-request-rules.md#7-vérification-automatique) |
 
-## Activer la vérification sur un dépôt
+## Faire évoluer ces règles
 
-Depuis le dépôt : onglet **Actions → New workflow → PR rules** (section « By Geonative »), puis commit.
-
-Ou à la main, créer `.github/workflows/pr-rules.yml` :
-
-```yaml
-name: PR rules
-
-on:
-  pull_request:
-    types: [opened, edited, reopened, synchronize, ready_for_review]
-
-jobs:
-  pr-rules:
-    uses: geonativefr/.github/.github/workflows/pr-rules.yml@main
-```
-
-Pour un dépôt dont les commits ne suivent pas Conventional Commits :
-
-```yaml
-jobs:
-  pr-rules:
-    uses: geonativefr/.github/.github/workflows/pr-rules.yml@main
-    with:
-      conventional-commits: false
-```
-
-Pour rendre le check bloquant, l'ajouter en « required status check » dans une règle de protection de branche ou un ruleset d'organisation : `pr-rules / Title and description`.
-
-## Faire évoluer les règles
-
-1. Modifier `docs/pull-request-rules.md` et, si la règle est vérifiable par un script, le bloc `BEGIN rules … END rules` de `.github/workflows/pr-rules.yml`.
-2. Ajouter ou ajuster un test dans `tests/pr-rules.test.mjs`, puis lancer `node --test tests/*.test.mjs`.
-3. Ouvrir une PR sur ce dépôt. Le CI lance les tests et vérifie la PR elle-même avec la nouvelle version du workflow.
-
-Le document de règles et le script doivent toujours dire la même chose.
+Toute évolution passe par une Pull Request sur ce dépôt. [Maintenir ce dépôt](docs/maintaining.md) explique comment ces règles s'appliquent aux autres dépôts, comment activer la vérification automatique sur un dépôt et comment ajouter une documentation.
