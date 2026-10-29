@@ -10,6 +10,7 @@ Toutes les règles sont dans **[docs/pull-request-rules.md](https://github.com/g
 - **Description en anglais**, qui commence directement par un résumé de 3 à 5 lignes, sans titre markdown.
 - Puis, seulement si nécessaire et dans cet ordre : `**TODO Staging:**`, `**TODO Prod:**`, `**PRs Dependency:**`, `**Related PRs:**`.
 - Une section TODO dès qu'il y a quelque chose à faire au déploiement : une case `- [ ]` par action, écrite en entier.
+- Une PR qui change quelque chose de visible joint des **captures d'écran** avant et après, bureau et mobile si le projet a une version mobile, chacune avec un titre descriptif au-dessus ([détail](https://github.com/geonativefr/.github/blob/main/docs/pull-request-rules.md#6-captures-décran)).
 - Toute PR est **ouverte en Draft**, puis passée en « Ready for review » quand elle est prête.
 
 Le modèle de description est pré-rempli à l'ouverture de chaque PR. Supprime les sections inutiles.
