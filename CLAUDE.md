@@ -6,7 +6,7 @@ L'équipe de développement Geonative n'avait jamais formalisé ses bonnes prati
 
 Le dépôt porte aussi ce que GitHub applique à toute l'organisation :
 
-- `CONTRIBUTING.md` et `pull_request_template.md`, hérités par chaque dépôt qui n'a pas les siens.
+- `CONTRIBUTING.md`, hérité par chaque dépôt qui n'a pas le sien. Aucun gabarit de PR n'est pré-rempli.
 - `.github/workflows/pr-rules.yml`, workflow réutilisable qui vérifie le titre et la description des PR, appelé par les autres dépôts en `@main`.
 - `workflow-templates/`, qui propose ce workflow dans l'onglet Actions des dépôts.
 
@@ -21,7 +21,7 @@ Tout ce qui arrive sur `main` s'applique aussitôt à la prochaine PR de chaque 
 - Chaque document porte un statut dans ce tableau : « En vigueur » ou « À venir ». Une règle décidée mais pas encore appliquée s'écrit comme les autres, précédée dans sa page d'une ligne `> **À venir** : …` qui donne sa date dès qu'elle est fixée. Le jour où elle s'applique, la ligne disparaît et le statut passe « En vigueur ».
 - `CONTRIBUTING.md` reste court : l'essentiel en une page, avec un lien vers le détail.
 - Une règle vit à un seul endroit. Les autres fichiers la résument en une ligne et renvoient vers elle.
-- Les liens de `CONTRIBUTING.md` et `pull_request_template.md` sont absolus (`https://github.com/geonativefr/.github/blob/main/…`), car GitHub affiche ces fichiers dans les autres dépôts. Ailleurs, les liens sont relatifs.
+- Les liens de `CONTRIBUTING.md` sont absolus (`https://github.com/geonativefr/.github/blob/main/…`), car GitHub affiche ce fichier dans les autres dépôts. Ailleurs, les liens sont relatifs.
 - Le dépôt est public : aucun nom d'hôte, adresse, secret ni détail interne. Les exemples utilisent des noms fictifs (`acme/api`, `staging-api-01`).
 
 La procédure complète d'ajout d'une page est dans [docs/maintaining.md](docs/maintaining.md#ajouter-une-documentation).

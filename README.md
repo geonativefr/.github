@@ -7,7 +7,7 @@ L'équipe de développement met à plat ses bonnes pratiques. Ce dépôt les ré
 | Document | Contenu | Statut |
 |---|---|---|
 | [Contribuer](CONTRIBUTING.md) | L'essentiel en une page : commits, Pull Requests, vérification automatique | En vigueur |
-| [Règles des Pull Requests](docs/pull-request-rules.md) | Titre, description, TODO de déploiement, dépendances entre PR, captures d'écran, mises à jour de sécurité, checklist | En vigueur, vérification automatique à venir |
+| [Règles des Pull Requests](docs/pull-request-rules.md) | Titre, description, TODO de déploiement, dépendances entre PR, labels Ready / Not Ready, captures d'écran, mises à jour de sécurité, checklist | En vigueur, vérification automatique à venir |
 
 **En vigueur** : la règle s'applique dès maintenant. **À venir** : la règle est décidée et s'appliquera bientôt, sa date est indiquée dès qu'elle est fixée.
 
@@ -21,6 +21,7 @@ L'équipe de développement met à plat ses bonnes pratiques. Ce dépôt les ré
 | noter ce qu'il faut faire au déploiement | [TODO Staging / TODO Prod](docs/pull-request-rules.md#3-todo-staging--todo-prod) |
 | signaler une PR qui doit partir avant la tienne | [PRs Dependency](docs/pull-request-rules.md#4-prs-dependency) |
 | relier les PR d'un même lot de travail | [Related PRs](docs/pull-request-rules.md#5-related-prs) |
+| savoir quand poser `Ready` ou `Not Ready` sur une Pull Request | [Description](docs/pull-request-rules.md#règles-générales) |
 | joindre des captures d'écran à une Pull Request | [Captures d'écran](docs/pull-request-rules.md#6-captures-décran) |
 | décrire une mise à jour de sécurité | [PR de mise à jour de sécurité](docs/pull-request-rules.md#7-pr-de-mise-à-jour-de-sécurité) |
 | voir une Pull Request complète et bien écrite | [Exemple complet](docs/pull-request-rules.md#8-exemple-complet) |
