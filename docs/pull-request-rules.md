@@ -45,6 +45,8 @@ Ce document fixe la façon d'écrire le **titre** et la **description** de toute
 
 ### Gabarit
 
+Aucun gabarit n'est pré-rempli à l'ouverture d'une PR : la description est écrite par la personne ou l'agent qui l'ouvre, sur la forme de référence ci-dessous.
+
 ```markdown
 <Résumé : de quoi il s'agit et ce que fait la PR, en 3 à 5 lignes>
 
@@ -78,6 +80,11 @@ Ce document fixe la façon d'écrire le **titre** et la **description** de toute
 - **Aucune ligne de signature** (`Co-Authored-By`, etc.).
 - **Parler en termes métier et techniques uniquement** : aucune référence aux outils, assistants ou à l'organisation interne du travail utilisés pour écrire le code.
 - **Toute PR est ouverte en Draft.** Elle passe en « Ready for review » seulement quand elle est réellement prête.
+- **Toute PR porte exactement un label `Ready` ou `Not Ready`**, en plus du statut Draft :
+  - elle s'ouvre en Draft et `Not Ready`
+  - `Ready` se pose quand elle est réellement prête : à sa sortie de Draft, ou quand la méthode du projet la déclare prête
+  - un nouveau push après cela remet `Not Ready`, jusqu'à ce qu'elle soit de nouveau prête
+  - un dépôt qui n'a pas ces labels les crée avec ces noms exacts : `Ready` (couleur `27e760`) et `Not Ready` (couleur `8c1455`)
 
 ### Règles communes aux 4 sections
 
@@ -360,3 +367,4 @@ Les PRs ouvertes par des bots (Dependabot, Renovate…) ne sont pas vérifiées.
 - [ ] Aucune PR de suite dans Related PRs
 - [ ] Tout est en anglais, sans point-virgule
 - [ ] La PR est ouverte en Draft
+- [ ] La PR porte `Not Ready`, remplacé par `Ready` quand elle est prête
