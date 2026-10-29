@@ -79,7 +79,8 @@ test('sections out of order fail', () => {
 })
 
 test('the template left as is fails on every empty section', () => {
-  const template = readFileSync(new URL('../pull_request_template.md', import.meta.url), 'utf8')
+  const rules = readFileSync(new URL('../docs/pull-request-rules.md', import.meta.url), 'utf8')
+  const template = rules.split('### Gabarit')[1].split('```markdown\n')[1].split('```')[0].replace(/<[^>]*>/g, '')
   const errors = check('fix: a', 'Fix it.\n' + template)
   for (const name of ['TODO Staging', 'TODO Prod', 'PRs Dependency', 'Related PRs']) {
     assert.ok(hasError(errors, name + ': the section has no real item'), name)

@@ -9,7 +9,6 @@ Ce document s'adresse à qui fait évoluer les règles ou ajoute une documentati
 ├── README.md                          ← porte d'entrée : index de la documentation
 ├── CONTRIBUTING.md                    ← hérité par tous les dépôts
 ├── CLAUDE.md                          ← consignes pour Claude Code sur ce dépôt
-├── pull_request_template.md           ← hérité par tous les dépôts
 ├── docs/
 │   ├── pull-request-rules.md          ← règles détaillées des PR
 │   └── maintaining.md                 ← ce fichier
@@ -25,11 +24,11 @@ Ce document s'adresse à qui fait évoluer les règles ou ajoute une documentati
 
 ## Comment ça marche
 
-**Héritage automatique.** GitHub utilise `CONTRIBUTING.md` et `pull_request_template.md` de ce dépôt pour chaque dépôt de l'organisation qui n'a pas sa propre version. Pour en profiter, un dépôt **ne doit pas** contenir son propre `pull_request_template.md` (ni à la racine, ni dans `.github/`, ni dans `docs/`) : supprime-le s'il existe.
+**Héritage automatique.** GitHub utilise le `CONTRIBUTING.md` de ce dépôt pour chaque dépôt de l'organisation qui n'a pas sa propre version. Aucun gabarit de PR n'est hérité : un dépôt **ne doit pas** contenir de `pull_request_template.md` (ni à la racine, ni dans `.github/`, ni dans `docs/`), car il serait pré-rempli à l'ouverture de chaque PR : supprime-le s'il existe.
 
 Ce dépôt doit rester **public** pour que l'héritage fonctionne.
 
-Ces deux fichiers s'affichent dans les autres dépôts : leurs liens sont toujours absolus (`https://github.com/geonativefr/.github/blob/main/…`).
+Ce fichier s'affiche dans les autres dépôts : ses liens sont toujours absolus (`https://github.com/geonativefr/.github/blob/main/…`).
 
 **Vérification centralisée.** `.github/workflows/pr-rules.yml` contient toute la logique de vérification. Chaque dépôt l'appelle avec un fichier de quelques lignes qui ne change jamais. Une modification des règles ici s'applique à tous les dépôts dès leur prochaine PR.
 
